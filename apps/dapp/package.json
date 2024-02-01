@@ -1,0 +1,34 @@
+{
+  "name": "@nexus/dapp",
+  "version": "0.1.1",
+  "engines": {
+    "node": ">=20.0.0"
+  },
+  "scripts": {
+    "prepare": "yarn typechain:compile && yarn typechain:copy",
+    "typechain:compile": "cd ../../protocol && yarn compile --force",
+    "typechain:copy": "cp -r ../../protocol/typechain ./src/types",
+    "dev": "vite",
+    "compile": "tsc",
+    "vite:build": "vite build",
+    "build": "yarn prepare && tsc && vite build",
+    "vercel-build": "yarn prepare && tsc && vite build",
+    "serve": "vite preview"
+  },
+  "dependencies": {
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0"
+  },
+  "devDependencies": {
+    "@types/react": "^18.2.43",
+    "@types/react-dom": "^18.2.17",
+    "@typescript-eslint/eslint-plugin": "^6.14.0",
+    "@typescript-eslint/parser": "^6.14.0",
+    "@vitejs/plugin-react": "^4.2.1",
+    "eslint": "^8.55.0",
+    "eslint-plugin-react-hooks": "^4.6.0",
+    "eslint-plugin-react-refresh": "^0.4.5",
+    "typescript": "^5.2.2",
+    "vite": "^5.0.8"
+  }
+}
