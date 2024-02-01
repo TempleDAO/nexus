@@ -5,7 +5,8 @@ import { ERC1967Proxy } from "@openzeppelin/contracts/proxy/ERC1967/ERC1967Proxy
 import { IERC20 } from "@openzeppelin/contracts/token/ERC20/IERC20.sol";
 import { Test, StdChains } from "forge-std/Test.sol";
 import { CommonEventsAndErrors } from "contracts/common/CommonEventsAndErrors.sol";
-import { ITempleElevatedAccess } from "contracts/interfaces/v2/access/ITempleElevatedAccess.sol";
+// import { ITempleElevatedAccess } from "contracts/interfaces/v2/access/ITempleElevatedAccess.sol";
+import { IElevatedAccess } from "contracts/interfaces/nexus/access/IElevatedAccess.sol";
 
 /// @notice A forge test base class which can setup to use a fork, deploy UUPS proxies, etc
 abstract contract TempleTest is Test {
@@ -52,26 +53,26 @@ abstract contract TempleTest is Test {
     }
 
     function setExplicitAccess(
-        ITempleElevatedAccess theContract, 
+        IElevatedAccess theContract, 
         address allowedCaller, 
         bytes4 fnSelector, 
         bool value
     ) internal {
-        ITempleElevatedAccess.ExplicitAccess[] memory access = new ITempleElevatedAccess.ExplicitAccess[](1);
-        access[0] = ITempleElevatedAccess.ExplicitAccess(fnSelector, value);
+        IElevatedAccess.ExplicitAccess[] memory access = new IElevatedAccess.ExplicitAccess[](1);
+        access[0] = IElevatedAccess.ExplicitAccess(fnSelector, value);
         theContract.setExplicitAccess(allowedCaller, access);
     }
 
     function setExplicitAccess(
-        ITempleElevatedAccess theContract, 
+        IElevatedAccess theContract, 
         address allowedCaller, 
         bytes4 fnSelector1, 
         bytes4 fnSelector2, 
         bool value
     ) internal {
-        ITempleElevatedAccess.ExplicitAccess[] memory access = new ITempleElevatedAccess.ExplicitAccess[](2);
-        access[0] = ITempleElevatedAccess.ExplicitAccess(fnSelector1, value);
-        access[1] = ITempleElevatedAccess.ExplicitAccess(fnSelector2, value);
+        IElevatedAccess.ExplicitAccess[] memory access = new IElevatedAccess.ExplicitAccess[](2);
+        access[0] = IElevatedAccess.ExplicitAccess(fnSelector1, value);
+        access[1] = IElevatedAccess.ExplicitAccess(fnSelector2, value);
         theContract.setExplicitAccess(allowedCaller, access);
     }
 

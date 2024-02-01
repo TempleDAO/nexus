@@ -126,62 +126,6 @@ module.exports = {
               interval: 5000,
             },
     },
-    rinkeby: {
-      url: process.env.RINKEBY_RPC_URL || '',
-      accounts: process.env.RINKEBY_ADDRESS_PRIVATE_KEY
-        ? [process.env.RINKEBY_ADDRESS_PRIVATE_KEY]
-        : [],
-      gasPrice: 8000000000,
-    },
-    goerli: {
-      url: process.env.GOERLI_RPC_URL || '',
-      accounts: process.env.GOERLI_ADDRESS_PRIVATE_KEY 
-        ? [process.env.GOERLI_ADDRESS_PRIVATE_KEY]
-        : [],
-      gasPrice: parseInt(process.env.GOERLI_GAS_IN_GWEI || '8') * 1000000000,
-    },
-    gnosisChiado: {
-      url: process.env.GNOSIS_CHIADO_RPC_URL || '',
-      accounts: process.env.GNOSIS_CHIADO_ADDRESS_PRIVATE_KEY 
-        ? [process.env.GNOSIS_CHIADO_ADDRESS_PRIVATE_KEY]
-        : [],
-      gasPrice: 1000000000,  // 1 gwei xDAI
-    },
-    gnosis: {
-      url: process.env.GNOSIS_RPC_URL || '',
-      accounts: process.env.GNOSIS_ADDRESS_PRIVATE_KEY 
-        ? [process.env.GNOSIS_ADDRESS_PRIVATE_KEY]
-        : [],
-      gasPrice: parseInt(process.env.GNOSIS_GAS_IN_GWEI || '0') * 1000000000,
-    },
-    mainnet: {
-      url: process.env.MAINNET_RPC_URL || '',
-      accounts: process.env.MAINNET_ADDRESS_PRIVATE_KEY
-        ? [process.env.MAINNET_ADDRESS_PRIVATE_KEY]
-        : [],
-      gasPrice: parseInt(process.env.MAINNET_GAS_IN_GWEI || '0') * 1000000000,
-    },
-    matic: {
-      url: process.env.MATIC_RPC_URL || '',
-      accounts: process.env.MATIC_ADDRESS_PRIVATE_KEY
-        ? [process.env.MAINNET_ADDRESS_PRIVATE_KEY]
-        : [],
-      gasPrice: 40000000000,
-    },
-    polygonMumbai: {
-        url: process.env.MUMBAI_RPC_URL || '',
-        accounts: process.env.MUMBAI_ADDRESS_PRIVATE_KEY
-            ? [process.env.MUMBAI_ADDRESS_PRIVATE_KEY]
-            : [],
-        gasPrice: 2000000000,
-    },
-    sepolia: {
-        url: process.env.SEPOLIA_RPC_URL || '',
-        accounts: process.env.SEPOLIA_ADDRESS_PRIVATE_KEY
-            ? [process.env.SEPOLIA_ADDRESS_PRIVATE_KEY]
-            : [],
-        gasPrice: parseInt(process.env.SEPOLIA_GAS_IN_GWEI || '0') * 1000000000,
-    },
     anvil: {
         url: "http://127.0.0.1:8545/",
         accounts: "remote",
@@ -197,12 +141,6 @@ module.exports = {
   etherscan: {
 
     apiKey: {
-      mainnet: process.env.ETHERSCAN_API_KEY,
-      gnosis: process.env.GNOSISSCAN_API_KEY,
-      polygonMumbai: process.env.POLYGONSCAN_API_KEY,
-      polygon: process.env.POLYGONSCAN_API_KEY,
-      goerli: process.env.ETHERSCAN_API_KEY,
-      sepolia: process.env.ETHERSCAN_API_KEY,
       arbitrumSepolia: process.env.ARBISCAN_API_KEY,
     },
     customChains: [
