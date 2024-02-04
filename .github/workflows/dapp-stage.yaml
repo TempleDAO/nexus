@@ -29,7 +29,7 @@ jobs:
         uses: rjstone/discord-webhook-notify@v1
         with:
           severity: error
-          description: (Dapp) STAGE Deploy to Vercel failed!
+          description: (NEXUS DAPP) STAGE Deploy to Vercel failed!
           details: Check the GH Action or Vercel logs for details.
           webhookUrl: ${{ secrets.DISCORD_WEBHOOK_URL }}
       - name: "fail"
@@ -39,6 +39,6 @@ jobs:
         uses: rjstone/discord-webhook-notify@v1
         with:
           severity: info
-          description: (Dapp) STAGE Deploy to Vercel succeeded!
+          description: (NEXUS DAPP) STAGE Deploy to Vercel succeeded!
           details: "[View Stage Deployment](https://stage.nexus.echoingwhispers.link)"
           webhookUrl: ${{ secrets.DISCORD_WEBHOOK_URL }}
