@@ -21,7 +21,7 @@ jobs:
           scope: ${{ secrets.VERCEL_ORG_ID }}
           vercel-project-id: ${{ secrets.DAPP_PROJECT_ID}}
           alias-domains: |
-            pr-{{PR_NUMBER}}-preview.nexus.echoingwhispers.link
+            pr-{{PR_NUMBER}}-preview-nexus.echoingwhispers.link
         continue-on-error: true
       - name: "notify failure"
         if: steps.deploy_step.outcome == 'failure'
@@ -39,7 +39,7 @@ jobs:
         uses: rjstone/discord-webhook-notify@v1
         with:
           severity: info
-          description: (Dapp) PREVIEW Deploy to Vercel succeeded!
+          description: (NEXUS DAPP) PREVIEW Deploy to Vercel succeeded!
           details: "[View Preview](${{ steps.deploy_step.outputs['preview-url'] }}) | [PR Details](${{ github.event.pull_request._links.html.href }})"
           footer: PR ${{ github.event.number }}
           webhookUrl: ${{ secrets.DISCORD_WEBHOOK_URL }}
