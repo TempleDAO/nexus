@@ -22,7 +22,7 @@ jobs:
           github-comment: false
           scope: ${{ secrets.VERCEL_ORG_ID }}
           alias-domains: | #Optional
-            stage.nexus.echoingwhispers.link
+            stage-nexus.echoingwhispers.link
         continue-on-error: true
       - name: "notify failure"
         if: steps.deploy_step.outcome == 'failure'
@@ -40,5 +40,5 @@ jobs:
         with:
           severity: info
           description: (NEXUS DAPP) STAGE Deploy to Vercel succeeded!
-          details: "[View Stage Deployment](https://stage.nexus.echoingwhispers.link)"
+          details: "[View Stage Deployment](https://stage-nexus.echoingwhispers.link)"
           webhookUrl: ${{ secrets.DISCORD_WEBHOOK_URL }}
