@@ -5,9 +5,15 @@ import svgr from 'vite-plugin-svgr';
 import path from 'path';
 import { dependencies } from './package.json';
 
-const VENDOR_CHUNKS = new Set(['react', 'react-router-dom', 'react-dom', 'styled-components', 'polished']);
+const VENDOR_CHUNKS = new Set([
+  'react',
+  'react-router-dom',
+  'react-dom',
+  'styled-components',
+  'polished',
+]);
 
-const VISUALIZATION_CHUNKS = new Set(['d3-shape', 'react-vis']);
+const VISUALIZATION_CHUNKS = new Set(['d3-shape']);
 
 const renderChunks = (deps: Record<string, string>) => {
   const chunks: Record<string, string[]> = {};
@@ -27,7 +33,9 @@ const plugins = [
     },
   }),
   svgr(),
-  legacy(),
+  legacy({
+    renderLegacyChunks: false,
+  }),
 ];
 
 const VITE_ENV = process.env.VITE_ENV;
@@ -38,7 +46,7 @@ export default defineConfig({
   optimizeDeps: {
     esbuildOptions: {
       target: 'es2020',
-    }
+    },
   },
   plugins,
   build: {
