@@ -20,6 +20,7 @@ export interface DeployedContracts {
   TEMPLE_SACRIFICE: string;
   NEXUS_COMMON: string;
   PARTNER_ZERO_SACRIFICE: string;
+  ISLAND_SHARD_MINTER: string;
 }
 
 export const DEPLOYED_CONTRACTS: { [key: string]: DeployedContracts } = {
@@ -32,7 +33,8 @@ export const DEPLOYED_CONTRACTS: { [key: string]: DeployedContracts } = {
     SHARD: '',
     TEMPLE_SACRIFICE: '',
     NEXUS_COMMON: '',
-    PARTNER_ZERO_SACRIFICE: ''
+    PARTNER_ZERO_SACRIFICE: '',
+    ISLAND_SHARD_MINTER: ''
   },
   arbitrumSepolia: {
     // Active contracts
@@ -43,7 +45,8 @@ export const DEPLOYED_CONTRACTS: { [key: string]: DeployedContracts } = {
     SHARD: '0x192aA9BfDcA5540406E211950C226C8E0cd5047F',
     TEMPLE_SACRIFICE: '0x1b274A49fF8Ec84f874B989EcF23840952D7E600',
     NEXUS_COMMON: '0x98c5E61b1B3731A1f379E8770861164d23118cdc',
-    PARTNER_ZERO_SACRIFICE: '0x2ae6318e34bb97ae3755AFcE75559452aA223A5D'
+    PARTNER_ZERO_SACRIFICE: '0x2ae6318e34bb97ae3755AFcE75559452aA223A5D',
+    ISLAND_SHARD_MINTER: '0x728B82335e35853296Ad3a7A128503aC027cB0cE'
   }
 };
 
