@@ -72,8 +72,8 @@ export const APP_CHAINS_FOR_WEB3_INIT = APP_CHAINS.map((chainDefinition) => ({
   rpcUrl: chainDefinition.rpcUrl,
 }));
 
-ENV_CHAIN_MAPPING.set("production", MAINNET_CHAIN);
-ENV_CHAIN_MAPPING.set("preview", SEPOLIA_CHAIN);
+ENV_CHAIN_MAPPING.set("production", ARBITRUM_CHAIN);
+ENV_CHAIN_MAPPING.set("preview", ARBITRUM_SEPOLIA_CHAIN);
 ENV_CHAIN_MAPPING.set("local", LOCAL_CHAIN);
 
 export const isSupportedChain = (chainId: number) => {
