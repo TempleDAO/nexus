@@ -5,6 +5,10 @@
       "packages": [
         "apps/*",
         "protocol"
+      ],
+      "nohoist": [
+        "**/hardhat",
+        "@nexus/protocol/**"
       ]
     },
     "devDependencies": {

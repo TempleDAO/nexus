@@ -1,5 +1,5 @@
 {
-  "name": "nexus",
+  "name": "@nexus/protocol",
   "version": "1.0.0",
   "description": "Nexus Smart Contracts",
   "main": "index.js",
@@ -37,6 +37,7 @@
   "scripts": {
     "compile": "hardhat compile",
     "typechain": "hardhat typechain",
+    "copytodapp": "cp -r ./typechain ../apps/dapp/src/types",
     "clean": "hardhat clean",
     "size": "hardhat size-contracts",
     "test": "NODE_ENV=test hardhat test",
