@@ -13,6 +13,7 @@ async function main() {
     const relicAddress = DEPLOYED_CONTRACTS[network.name].RELIC;
     const shardAddress = DEPLOYED_CONTRACTS[network.name].SHARD;
     const nexusCommonAddress = DEPLOYED_CONTRACTS[network.name].NEXUS_COMMON;
+    const verifierAddress = DEPLOYED_CONTRACTS[network.name].PUZZLE_MINTER_VERIFIER;
 
     const minterFactory = new IslandShardMinter__factory(owner);
     
@@ -22,7 +23,8 @@ async function main() {
         minterFactory.deploy,
         relicAddress,
         shardAddress,
-        nexusCommonAddress
+        nexusCommonAddress,
+        verifierAddress
     );
 }
 

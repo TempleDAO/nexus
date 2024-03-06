@@ -4,11 +4,12 @@ pragma solidity 0.8.19;
 
 
 interface IIslandShardMinter {
-    event ShardMinted(uint256 relicId, address indexed owner);
+    event ShardMinted(uint256 relicId, uint256 puzzleId, address indexed owner);
 
     error ShardMintedForRelic(uint256 relicId);
     error EnclaveMismatch(uint256 shardEnclaveId, uint256 relicEnclaveId);
+    error InvalidSignature(address sender, uint256 relicId, uint256 puzzleId);
 
-    function mint(uint256 relicId) external;
-    function minted(uint256 relicId) external returns (bool);
+    function mint(uint256 relicId, uint256 puzzleId, bytes memory signature) external;
+    function minted(uint256 relicId, uint256 puzzleId) external returns (bool);
 }

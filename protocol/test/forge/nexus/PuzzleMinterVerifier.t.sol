@@ -7,7 +7,6 @@ import { NexusTestBase } from "./Nexus.t.sol";
 import { PuzzleMinterVerifier } from "./../../../contracts/nexus/PuzzleMinterVerifier.sol";
 import { CommonEventsAndErrors } from "../../../contracts/common/CommonEventsAndErrors.sol";
 import { ECDSA } from "@openzeppelin/contracts/utils/cryptography/ECDSA.sol";
-import { console } from "./../../../lib/forge-std/src/console.sol";
 
 
 contract PuzzleMinterVerifierBaseTest is NexusTestBase {
