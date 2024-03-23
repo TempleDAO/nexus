@@ -1,4 +1,4 @@
-pragma solidity 0.8.19;
+pragma solidity 0.8.20;
 // SPDX-License-Identifier: AGPL-3.0-or-later
 // Temple (nexus/PuzzleMinterVerifier.sol)
 
@@ -7,18 +7,28 @@ import { CommonEventsAndErrors } from "../common/CommonEventsAndErrors.sol";
 import { EIP712 } from "@openzeppelin/contracts/utils/cryptography/EIP712.sol";
 import { ECDSA } from "@openzeppelin/contracts/utils/cryptography/ECDSA.sol";
 import { IPuzzleMinterVerifier } from "../interfaces/nexus/IPuzzleMinterVerifier.sol";
+import { ElevatedAccess } from "./access/ElevatedAccess.sol";
 
 /// @title Contract verifies signatures signed by set signer
-contract PuzzleMinterVerifier is IPuzzleMinterVerifier, EIP712 {
+contract PuzzleMinterVerifier is IPuzzleMinterVerifier, ElevatedAccess, EIP712 {
 
-    address public immutable signer;
+    address public signer;
+
+    event SignerSet(address signer);
 
     constructor(
         address _signer,
+        address _executor,
         string memory _name,
         string memory _version
-    ) EIP712(_name, _version) {
+    ) EIP712(_name, _version) ElevatedAccess(_executor){
         signer = _signer;
+    }
+
+    function setSigner(address _signer) external override onlyElevatedAccess {
+        if (_signer == address(0)) { revert CommonEventsAndErrors.InvalidAddress(); }
+        signer = _signer;
+        emit SignerSet(_signer);
     }
 
     /// @notice Verify if signature is signed by signer
@@ -41,7 +51,12 @@ contract PuzzleMinterVerifier is IPuzzleMinterVerifier, EIP712 {
 
     /// @notice Get digest using typed data
     function getHashDigest(address player, uint256 puzzleId, uint256 nonce) public view override returns (bytes32) {
-        bytes32 digest = _hashTypedDataV4(keccak256(abi.encodePacked(player, puzzleId, nonce)));
+        bytes32 digest = _hashTypedDataV4(keccak256(abi.encode(
+          keccak256("Mint(address player,uint256 puzzleId,uint256 nonce)"),
+          player,
+          puzzleId,
+          nonce
+        )));
         return digest;
     }
 }

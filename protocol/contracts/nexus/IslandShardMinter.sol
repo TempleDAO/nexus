@@ -1,4 +1,4 @@
-pragma solidity 0.8.19;
+pragma solidity 0.8.20;
 // SPDX-License-Identifier: AGPL-3.0-or-later
 // Temple (nexus/IslandShardMinter.sol)
 
@@ -8,11 +8,11 @@ import { IRelic } from "contracts/interfaces/nexus/IRelic.sol";
 import { IShard } from "contracts/interfaces/nexus/IShard.sol";
 import { INexusCommon } from "contracts/interfaces/nexus/INexusCommon.sol";
 import { IIslandShardMinter } from "contracts/interfaces/nexus/IIslandShardMinter.sol";
-import { EnumerableSet } from "@openzeppelin/contracts/utils/structs/EnumerableSet.sol";
+// import { EnumerableSet } from "@openzeppelin/contracts/utils/structs/EnumerableSet.sol";
 import { IPuzzleMinterVerifier } from "../interfaces/nexus/IPuzzleMinterVerifier.sol";
 
 contract IslandShardMinter is IIslandShardMinter {
-    using EnumerableSet for EnumerableSet.UintSet;
+    // using EnumerableSet for EnumerableSet.UintSet;
 
     IRelic public immutable relic;
     IShard public immutable shard;
@@ -20,13 +20,7 @@ contract IslandShardMinter is IIslandShardMinter {
     IPuzzleMinterVerifier public immutable sigVerifier;
 
     uint256 private immutable SHARD_MINT_AMOUNT;
-    /// todo change to relicId => puzzleId => minted?
     mapping(uint256 relicId => mapping(uint256 puzzleId => bool minted)) public minted;
-    /// @notice use relicId as nonce
-    // mapping(address => uint256) public nextMinterNonce;
-    /// @notice set of hashes used by sender. keep track of (sender,puzzleId,relicId)
-    /// can use minted rather with relicId => puzzleId => minted
-    // mapping(address sender => bytes32 hash) public usedHa;
 
     constructor(
         address _relic,
