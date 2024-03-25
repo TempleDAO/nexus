@@ -12,7 +12,7 @@ async function main() {
     const [owner] = await ethers.getSigners();
 
     const verifierFactory = new PuzzleMinterVerifier__factory(owner);
-    const signer = '0x35B0D2534d267c688cabe467cc208Eff1CACe52E';//'0xCBd7Ab6abC38985DFF0e295c691cA571f74E680f';
+    const signer = '0xCBd7Ab6abC38985DFF0e295c691cA571f74E680f';
     const name = 'NEXUS_PUZZLE_MINTER_VERIFIER';
     const symbol = 'NPMV';
 

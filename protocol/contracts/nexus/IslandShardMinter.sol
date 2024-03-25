@@ -8,11 +8,9 @@ import { IRelic } from "contracts/interfaces/nexus/IRelic.sol";
 import { IShard } from "contracts/interfaces/nexus/IShard.sol";
 import { INexusCommon } from "contracts/interfaces/nexus/INexusCommon.sol";
 import { IIslandShardMinter } from "contracts/interfaces/nexus/IIslandShardMinter.sol";
-// import { EnumerableSet } from "@openzeppelin/contracts/utils/structs/EnumerableSet.sol";
 import { IPuzzleMinterVerifier } from "../interfaces/nexus/IPuzzleMinterVerifier.sol";
 
 contract IslandShardMinter is IIslandShardMinter {
-    // using EnumerableSet for EnumerableSet.UintSet;
 
     IRelic public immutable relic;
     IShard public immutable shard;
