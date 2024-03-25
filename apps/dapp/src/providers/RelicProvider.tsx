@@ -1,7 +1,19 @@
 import { createContext, PropsWithChildren, useContext, useState } from 'react';
-import { RelicEnclave, ItemInventory, RelicItemData, RelicService, RelicRarity, RelicData } from './types';
+import {
+  RelicEnclave,
+  ItemInventory,
+  RelicItemData,
+  RelicService,
+  RelicRarity,
+  RelicData,
+} from './types';
 
-import { BigNumber, ContractReceipt, ContractTransaction, Signer } from 'ethers';
+import {
+  BigNumber,
+  ContractReceipt,
+  ContractTransaction,
+  Signer,
+} from 'ethers';
 import env from '../constants/env';
 import {
   Relic,
@@ -10,6 +22,7 @@ import {
   Relic__factory,
   TempleSacrifice__factory,
   ERC20__factory,
+  ShardMinterImplementation__factory,
   // Apocrypha__factory,
   // PathofTheTemplarShard__factory,
 } from 'types/typechain';
@@ -58,6 +71,11 @@ const INITIAL_STATE: RelicService = {
     isLoading: false,
     error: null,
   },
+  mintOrigamiShard: {
+    handler: asyncNoop,
+    isLoading: false,
+    error: null,
+  },
 };
 
 const TXN_SUCCESS_CODE = 1;
@@ -68,23 +86,34 @@ export const RelicProvider = (props: PropsWithChildren<unknown>) => {
   const { wallet, ensureAllowance, signer } = useWallet();
   const { openNotification } = useNotification();
 
-  const [inventoryState, setInventoryState] = useState<Nullable<ItemInventory>>(INITIAL_STATE.inventory);
+  const [inventoryState, setInventoryState] = useState<Nullable<ItemInventory>>(
+    INITIAL_STATE.inventory
+  );
 
   // TODO: Also handle error
   const [inventoryLoading, setInventoryLoading] = useState(false);
 
-  const fetchInventory = async (walletAddress: string, signer: Signer): Promise<ItemInventory> => {
+  const fetchInventory = async (
+    walletAddress: string,
+    signer: Signer
+  ): Promise<ItemInventory> => {
     if (!walletAddress) {
       throw new NoWalletAddressError();
     }
 
-    const relicContract = new Relic__factory(signer).attach(env.nexus.templeRelicAddress);
-    const shardsContract = new Shard__factory(signer).attach(env.nexus.templeShardsAddress);
+    const relicContract = new Relic__factory(signer).attach(
+      env.nexus.templeRelicAddress
+    );
+    const shardsContract = new Shard__factory(signer).attach(
+      env.nexus.templeShardsAddress
+    );
 
     const itemIds = [...Array(200).keys()];
 
     const extractValidItems = (counts: BigNumber[]): RelicItemData[] => {
-      return counts.map((count, idx) => ({ id: idx, count: count.toNumber() })).filter(({ count }) => count > 0);
+      return counts
+        .map((count, idx) => ({ id: idx, count: count.toNumber() }))
+        .filter(({ count }) => count > 0);
     };
 
     const fetchRelicIds = async () => {
@@ -107,7 +136,9 @@ export const RelicProvider = (props: PropsWithChildren<unknown>) => {
     const fetchRelicData = async (relicIds: BigNumber[]) => {
       return Promise.all(
         relicIds.map(async (relicId) => {
-          const [enclaveId, rarity, xp] = await relicContract.getRelicInfo(relicId);
+          const [enclaveId, rarity, xp] = await relicContract.getRelicInfo(
+            relicId
+          );
           const [itemBalances] = await Promise.all([
             relicContract.getEquippedShards(relicId, itemIds),
             // relicContract.getRelicInfos(relicId) as Promise<[RelicRarity, RelicEnclave]>,
@@ -117,7 +148,13 @@ export const RelicProvider = (props: PropsWithChildren<unknown>) => {
           // rarity: number;
           // xp: BigNumber;
           const items = extractValidItems(itemBalances);
-          return { id: relicId, enclave: enclaveId.toNumber(), rarity, xp, items } as RelicData;
+          return {
+            id: relicId,
+            enclave: enclaveId.toNumber(),
+            rarity,
+            xp,
+            items,
+          } as RelicData;
         })
       );
     };
@@ -129,7 +166,9 @@ export const RelicProvider = (props: PropsWithChildren<unknown>) => {
     }
 
     const addresses = itemIds.map((_) => walletAddress);
-    const items = extractValidItems(await shardsContract.balanceOfBatch(addresses, itemIds));
+    const items = extractValidItems(
+      await shardsContract.balanceOfBatch(addresses, itemIds)
+    );
     return { relics, items };
   };
 
@@ -151,9 +190,13 @@ export const RelicProvider = (props: PropsWithChildren<unknown>) => {
     return inventory;
   };
 
-  const callRelicContractFunction = async (fn: (relicContract: Relic) => Promise<ContractTransaction>) => {
+  const callRelicContractFunction = async (
+    fn: (relicContract: Relic) => Promise<ContractTransaction>
+  ) => {
     if (inventoryState && signer) {
-      const relicContract = new Relic__factory(signer).attach(env.nexus.templeRelicAddress);
+      const relicContract = new Relic__factory(signer).attach(
+        env.nexus.templeRelicAddress
+      );
       const receipt = await (await await fn(relicContract)).wait();
       const inventory = (await updateInventory())!;
       return { inventory, receipt };
@@ -163,7 +206,9 @@ export const RelicProvider = (props: PropsWithChildren<unknown>) => {
   const transmute = async (recipeId: number) => {
     if (signer) {
       // TODO: Add error handling
-      const shardsContract = new Shard__factory(signer).attach(env.nexus.templeShardsAddress);
+      const shardsContract = new Shard__factory(signer).attach(
+        env.nexus.templeShardsAddress
+      );
 
       let receipt: ContractReceipt;
       try {
@@ -184,17 +229,23 @@ export const RelicProvider = (props: PropsWithChildren<unknown>) => {
     }
   };
 
-  const callShardsContractFunction = async (fn: (shardsContract: Shard) => Promise<ContractTransaction>) => {
+  const callShardsContractFunction = async (
+    fn: (shardsContract: Shard) => Promise<ContractTransaction>
+  ) => {
     // TODO: Error handling?
     if (inventoryState && signer) {
-      const shardsContract = new Shard__factory(signer).attach(env.nexus.templeShardsAddress);
+      const shardsContract = new Shard__factory(signer).attach(
+        env.nexus.templeShardsAddress
+      );
       const receipt = await (await fn(shardsContract)).wait();
       const inventory = (await updateInventory())!;
       return { inventory, receipt };
     }
   };
 
-  const callRelicFunctionAndDiffRelics = async (fn: (relicContract: Relic) => Promise<ContractTransaction>) => {
+  const callRelicFunctionAndDiffRelics = async (
+    fn: (relicContract: Relic) => Promise<ContractTransaction>
+  ) => {
     if (inventoryState) {
       const oldRelics = [...inventoryState.relics];
       const callResult = await callRelicContractFunction(fn);
@@ -203,8 +254,12 @@ export const RelicProvider = (props: PropsWithChildren<unknown>) => {
           inventory: { relics: newRelics },
           receipt,
         } = callResult;
-        const added = newRelics.filter((relic) => oldRelics.findIndex((r) => r.id.eq(relic.id)) < 0);
-        const removed = oldRelics.filter((relic) => newRelics.findIndex((r) => r.id.eq(relic.id)) < 0);
+        const added = newRelics.filter(
+          (relic) => oldRelics.findIndex((r) => r.id.eq(relic.id)) < 0
+        );
+        const removed = oldRelics.filter(
+          (relic) => newRelics.findIndex((r) => r.id.eq(relic.id)) < 0
+        );
         return { added, removed, receipt };
       }
     }
@@ -216,7 +271,9 @@ export const RelicProvider = (props: PropsWithChildren<unknown>) => {
 
   const mintRelic = async (address: string, enclave: RelicEnclave) => {
     // TODO: Add error handling
-    const result = await callRelicFunctionAndDiffRelics((relic) => relic.mintRelic(address, enclave));
+    const result = await callRelicFunctionAndDiffRelics((relic) =>
+      relic.mintRelic(address, enclave)
+    );
     if (result && result.added.length > 0) {
       openNotification({
         title: `Minted ${joinRelicLabels(result.added)}`,
@@ -233,11 +290,19 @@ export const RelicProvider = (props: PropsWithChildren<unknown>) => {
     }
 
     if (wallet && signer) {
-      const shardsContract = new Shard__factory(signer).attach(env.nexus.templeShardsAddress);
-      const isApproved = await shardsContract.isApprovedForAll(wallet, env.nexus.templeRelicAddress);
+      const shardsContract = new Shard__factory(signer).attach(
+        env.nexus.templeShardsAddress
+      );
+      const isApproved = await shardsContract.isApprovedForAll(
+        wallet,
+        env.nexus.templeRelicAddress
+      );
 
       if (!isApproved) {
-        const txn = await shardsContract.setApprovalForAll(env.nexus.templeRelicAddress, true);
+        const txn = await shardsContract.setApprovalForAll(
+          env.nexus.templeRelicAddress,
+          true
+        );
         const txnResult = await txn.wait();
 
         if (txnResult.status === TXN_SUCCESS_CODE) {
@@ -249,7 +314,10 @@ export const RelicProvider = (props: PropsWithChildren<unknown>) => {
     }
   };
 
-  const invokeEquipShardes = async (relicId: BigNumber, items: RelicItemData[]) => {
+  const invokeEquipShardes = async (
+    relicId: BigNumber,
+    items: RelicItemData[]
+  ) => {
     const itemIds = items.map((item) => item.id);
     const itemCounts = items.map((item) => item.count);
 
@@ -284,7 +352,9 @@ export const RelicProvider = (props: PropsWithChildren<unknown>) => {
     }
     const itemIds = items.map((item) => item.id);
     const itemCounts = items.map((item) => item.count);
-    const result = await callRelicContractFunction((relic) => relic.batchUnequipShards(relicId, itemIds, itemCounts));
+    const result = await callRelicContractFunction((relic) =>
+      relic.batchUnequipShards(relicId, itemIds, itemCounts)
+    );
     if (result) {
       const idString = itemIds.map((id) => `#${id}`).join(', ');
       openNotification({
@@ -304,7 +374,9 @@ export const RelicProvider = (props: PropsWithChildren<unknown>) => {
 
     // const relicIds = await fetchRelicIds();
 
-    const relicContract = new Relic__factory(signer).attach(env.nexus.templeRelicAddress);
+    const relicContract = new Relic__factory(signer).attach(
+      env.nexus.templeRelicAddress
+    );
     // const receipt = await relicContract.whitelisted(wallet);
     setIsWhitelisted(false);
   };
@@ -315,9 +387,16 @@ export const RelicProvider = (props: PropsWithChildren<unknown>) => {
     }
 
     const TEMPLE = new ERC20__factory(signer).attach(env.nexus.templeToken);
-    await ensureAllowance(TICKER_SYMBOL.TEMPLE_TOKEN, TEMPLE, env.nexus.templeSacrificeAddress, BigNumber.from(100));
+    await ensureAllowance(
+      TICKER_SYMBOL.TEMPLE_TOKEN,
+      TEMPLE,
+      env.nexus.templeSacrificeAddress,
+      BigNumber.from(100)
+    );
 
-    const sacrificeContract = new TempleSacrifice__factory(signer).attach(env.nexus.templeSacrificeAddress);
+    const sacrificeContract = new TempleSacrifice__factory(signer).attach(
+      env.nexus.templeSacrificeAddress
+    );
     const txn = await sacrificeContract.sacrifice(enclave, wallet);
     const receipt = await txn.wait();
 
@@ -329,13 +408,19 @@ export const RelicProvider = (props: PropsWithChildren<unknown>) => {
     });
   };
 
-  const [sacrificeTempleHandler, sacrificeTempleRequestState] = useRequestState(sacrificeTemple, {
-    shouldReThrow: true,
-  });
+  const [sacrificeTempleHandler, sacrificeTempleRequestState] = useRequestState(
+    sacrificeTemple,
+    {
+      shouldReThrow: true,
+    }
+  );
 
-  const [checkWhiteListHandler, checkWhiteListRequestState] = useRequestState(checkWhiteList, {
-    shouldReThrow: true,
-  });
+  const [checkWhiteListHandler, checkWhiteListRequestState] = useRequestState(
+    checkWhiteList,
+    {
+      shouldReThrow: true,
+    }
+  );
 
   const fetchSacrificePrice = async () => {
     if (!wallet || !signer) {
@@ -343,7 +428,9 @@ export const RelicProvider = (props: PropsWithChildren<unknown>) => {
     }
 
     try {
-      const sacrificeContract = new TempleSacrifice__factory(signer).attach(env.nexus.templeSacrificeAddress);
+      const sacrificeContract = new TempleSacrifice__factory(signer).attach(
+        env.nexus.templeSacrificeAddress
+      );
       const price: BigNumber = await sacrificeContract.getPrice();
       setSacrificePrice(price);
     } catch (error) {
@@ -355,9 +442,10 @@ export const RelicProvider = (props: PropsWithChildren<unknown>) => {
 
   const [sacrificePrice, setSacrificePrice] = useState(ZERO);
 
-  const [fetchSacrificePriceHandler, fetchSacrificePriceRequestState] = useRequestState(fetchSacrificePrice, {
-    shouldReThrow: true,
-  });
+  const [fetchSacrificePriceHandler, fetchSacrificePriceRequestState] =
+    useRequestState(fetchSacrificePrice, {
+      shouldReThrow: true,
+    });
 
   const mintShard = async () => {
     if (!signer || !wallet) {
@@ -376,7 +464,7 @@ export const RelicProvider = (props: PropsWithChildren<unknown>) => {
 
     openNotification({
       title: 'Successfully Minted Shard',
-      hash: "" //receipt.transactionHash,
+      hash: '', //receipt.transactionHash,
     });
   };
 
@@ -403,13 +491,45 @@ export const RelicProvider = (props: PropsWithChildren<unknown>) => {
 
     openNotification({
       title: 'Successfully Minted Shard',
-      hash: ""//receipt.transactionHash,
+      hash: '', //receipt.transactionHash,
     });
   };
 
-  const [mintPathOfTemplarShardHandler, mintPathOfTemplarShardRequestState] = useRequestState(mintPathOfTemplarShard, {
-    shouldReThrow: true,
-  });
+  const [mintPathOfTemplarShardHandler, mintPathOfTemplarShardRequestState] =
+    useRequestState(mintPathOfTemplarShard, {
+      shouldReThrow: true,
+    });
+
+  const mintOrigamiShard = async (relicIndex: BigNumber) => {
+    if (!signer || !wallet) {
+      return;
+    }
+
+    const minterContract = new ShardMinterImplementation__factory(
+      signer
+    ).attach(env.nexus.origamiShardMinterAddress);
+
+    let receipt: ContractReceipt;
+    try {
+      const txnReceipt = await minterContract.mint(relicIndex, {
+        gasLimit: 400000,
+      });
+      receipt = await txnReceipt.wait();
+    } catch (error: any) {
+      console.log(error.message);
+      throw error;
+    }
+
+    openNotification({
+      title: 'Successfully Minted Shard',
+      hash: receipt.transactionHash,
+    });
+  };
+
+  const [mintOrigamiShardHandler, mintOrigamiShardRequestState] =
+    useRequestState(mintOrigamiShard, {
+      shouldReThrow: true,
+    });
 
   return (
     <RelicContext.Provider
@@ -451,6 +571,11 @@ export const RelicProvider = (props: PropsWithChildren<unknown>) => {
           handler: mintPathOfTemplarShardHandler,
           isLoading: mintPathOfTemplarShardRequestState.isLoading,
           error: mintPathOfTemplarShardRequestState.error,
+        },
+        mintOrigamiShard: {
+          handler: mintOrigamiShardHandler,
+          isLoading: mintOrigamiShardRequestState.isLoading,
+          error: mintOrigamiShardRequestState.error,
         },
       }}
     >
