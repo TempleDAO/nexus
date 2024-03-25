@@ -1,4 +1,4 @@
-pragma solidity 0.8.19;
+pragma solidity 0.8.20;
 // SPDX-License-Identifier: AGPL-3.0-or-later
 // Temple (tests/forge/nexus/IslandShardMinter.t.sol)
 
@@ -35,7 +35,7 @@ contract IslandShardMinterTest is NexusTestBase {
     function setUp() public {
         (signer, signerPrivateKey) = makeAddrAndKey("mike");
         (user, userPrivateKey) = makeAddrAndKey("john");
-        verifier = new PuzzleMinterVerifier(signer, _NAME, _SYMBOL);
+        verifier = new PuzzleMinterVerifier(signer, executor, _NAME, _SYMBOL);
         nexusCommon = new NexusCommon(executor);
         relic = new Relic(NAME, SYMBOL, address(nexusCommon), executor);
         shard = new Shard(address(relic), address(nexusCommon), executor, "http://example.com");

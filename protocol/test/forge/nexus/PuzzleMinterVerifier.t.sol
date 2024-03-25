@@ -1,4 +1,4 @@
-pragma solidity 0.8.19;
+pragma solidity 0.8.20;
 // SPDX-License-Identifier: AGPL-3.0-or-later
 // Temple (tests/forge/nexus/PuzzleMinterVerifier.t.sol)
 
@@ -24,7 +24,7 @@ contract PuzzleMinterVerifierBaseTest is NexusTestBase {
     function setUp() public {
         (signer, signerPrivateKey) = makeAddrAndKey("mike");
         user = makeAddr("john");
-        verifier = new PuzzleMinterVerifier(signer, _NAME, _SYMBOL);
+        verifier = new PuzzleMinterVerifier(signer, executor, _NAME, _SYMBOL);
     }
     
     function test_verify() public {

@@ -1,4 +1,4 @@
-pragma solidity 0.8.19;
+pragma solidity 0.8.20;
 // SPDX-License-Identifier: AGPL-3.0-or-later
 // Temple (tests/forge/nexus/Shard.t.sol)
 
@@ -679,7 +679,7 @@ contract ShardTest is ShardTestBase {
         uint256 bobShard1BalanceBefore = shard.balanceOf(bob, SHARD_1_ID);
         uint256 bobShard2BalanceBefore = shard.balanceOf(bob, SHARD_2_ID);
         vm.startPrank(alice);
-        vm.expectRevert(abi.encodeWithSelector(IShard.ERC1155MissingApprovalForAll.selector, alice, bob));
+        vm.expectRevert(abi.encodeWithSelector(IShard.MissingApprovalForAllERC1155.selector, alice, bob));
         shard.burnBatch(bob, shardIds, amounts);
         vm.startPrank(bob);
         shard.burn(bob, SHARD_1_ID, 1);
