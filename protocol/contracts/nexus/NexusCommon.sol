@@ -1,4 +1,4 @@
-pragma solidity 0.8.19;
+pragma solidity 0.8.20;
 // SPDX-License-Identifier: AGPL-3.0-or-later
 // Temple (nexus/NexusCommon.sol)
 
@@ -12,6 +12,7 @@ import { IShard } from "../interfaces/nexus/IShard.sol";
 contract NexusCommon is INexusCommon, ElevatedAccess {
     using EnumerableSet for EnumerableSet.UintSet;
 
+    /// @notice Shard
     IShard public shard;
 
     /// @notice each shard belongs to exactly 1 enclave. an enclave can have many shards

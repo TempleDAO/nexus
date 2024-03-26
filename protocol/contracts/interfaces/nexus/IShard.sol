@@ -1,4 +1,4 @@
-pragma solidity 0.8.19;
+pragma solidity 0.8.20;
 // SPDX-License-Identifier: AGPL-3.0-or-later
 // Temple (interfaces/nexus/IShard.sol)
 
@@ -33,7 +33,7 @@ interface IShard is IERC1155 {
     error MintCapExceeded(uint256 cap, uint256 amount);
     error InvalidRecipe(uint256 recipeId);
     error InvalidParamLength();
-    error ERC1155MissingApprovalForAll(address msgSender, address account);
+    error MissingApprovalForAllERC1155(address msgSender, address account);
 
     /*
      * @notice Enable minters to mint new shards, one after the next. If there are two minters and next shard ID
