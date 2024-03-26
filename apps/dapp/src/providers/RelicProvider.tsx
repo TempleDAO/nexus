@@ -386,7 +386,7 @@ export const RelicProvider = (props: PropsWithChildren<unknown>) => {
       return;
     }
 
-    const TEMPLE = new ERC20__factory(signer).attach(env.nexus.templeToken);
+    const TEMPLE = ERC20__factory.connect(env.nexus.templeToken, signer);
     await ensureAllowance(
       TICKER_SYMBOL.TEMPLE_TOKEN,
       TEMPLE,
