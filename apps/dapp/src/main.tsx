@@ -17,6 +17,7 @@ import NexusLibrary from 'components/Pages/Nexus/Quests/FirstQuest/Library';
 import Quiz from 'components/Pages/Nexus/Quests/FirstQuest/Quiz';
 import PotMint from 'components/Pages/Nexus/Quests/PathOfTemplar';
 import OrigamiPage from 'components/Pages/Nexus/Origami';
+import DevCollectSlide from 'components/Pages/Nexus/Quests/FirstQuest/Quiz/DevCollectSlide';
 
 ReactDOM.render(
   <React.StrictMode>
@@ -57,7 +58,7 @@ ReactDOM.render(
               element={
                 <>
                   <CoreLayout headless mode="nexus" />
-                  <Quiz />
+                  <DevCollectSlide />
                 </>
               }
             />

@@ -1,11 +1,10 @@
 import origami_header_logo from 'assets/images/origami-header-logo.svg';
 import styled from 'styled-components';
 import { Overlay, DisplayBlock, PuzzleButton } from './styled';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { useRelic } from 'providers/RelicProvider';
-import { RelicEnclave } from 'providers/types';
-import { getEnclavePalette } from '../Relic/RelicStatsPanel';
 import { BigNumber } from 'ethers';
+import SelectRelicDialog from './SelectRelicDialog';
 
 type MintShardProps = {
   onMintCompleteHandler: () => void;
@@ -46,72 +45,11 @@ export const MintShard = ({ onMintCompleteHandler }: MintShardProps) => {
   );
 };
 
-type SelectRelicDialogProps = {
-  onSelectRelic: (relicId: BigNumber) => void;
-};
-
-const SelectRelicDialog = ({ onSelectRelic }: SelectRelicDialogProps) => {
-  // get inventory with all relics
-  const { inventory, updateInventory, inventoryLoading } = useRelic();
-
-  // update inventory on load
-  useEffect(() => {
-    updateInventory();
-  }, []);
-
-  return inventoryLoading ? (
-    <Overlay visible={true} blur={true}>
-      <DisplayBlock>
-        <OrigamiHeaderLogo />
-        <SelectText>Loading Inventory...</SelectText>
-      </DisplayBlock>
-    </Overlay>
-  ) : (
-    <Overlay visible={true} blur={true}>
-      <ButtonList>
-        <OrigamiHeaderLogo />
-        <SelectText>Select a Relic To Mint</SelectText>
-        {inventory?.relics.map((relic, idx) => (
-          <RelicButton
-            key={idx}
-            enclave={relic.enclave}
-            onClick={() => {
-              onSelectRelic(relic.id);
-            }}
-          >{`Relic ${relic.id}`}</RelicButton>
-        ))}
-      </ButtonList>
-    </Overlay>
-  );
-};
-
 const SelectText = styled.div`
   color: white;
   font-size: 1.5rem;
   margin-top: 20px;
   margin-bottom: 20px;
-`;
-
-const ButtonList = styled.div`
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-`;
-
-type RelicButtonProps = {
-  enclave: RelicEnclave;
-};
-
-const RelicButton = styled.button<RelicButtonProps>`
-  margin: 12px;
-  font-size: 1.5rem;
-  background: ${(props) =>
-    props.theme.palette.enclave[getEnclavePalette(props.enclave)]};
-  border: 1px solid
-    ${(props) => props.theme.palette.enclave[getEnclavePalette(props.enclave)]};
-  padding: 1rem 2rem;
-  border-radius: 12px;
-  cursor: pointer;
 `;
 
 type PuzzleShardClaimDialogProps = {
@@ -181,12 +119,6 @@ const PuzzleShardClaimCompleteDialog = () => {
     </Overlay>
   );
 };
-
-const ClaimedMessage = styled.div`
-  color: white;
-  font-size: 2rem;
-  margin-bottom: 20px;
-`;
 
 const OrigamiHeaderLogo = styled.img.attrs({
   src: origami_header_logo,

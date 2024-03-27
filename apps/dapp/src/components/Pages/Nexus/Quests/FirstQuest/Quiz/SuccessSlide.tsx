@@ -13,12 +13,22 @@ const SuccessSlide = () => {
         RETURN TO THE NEXUS <br />
         TO REST FROM YOUR PILGRIMAGE.
       </TextContainer>
-      <Link to={'/nexus'}>
-        <ReturnToNexusButton playClickSound>RETURN TO THE NEXUS</ReturnToNexusButton>
-      </Link>
+      <ReturnToNexusText>
+        CLOSE TAB TO RETURN TO THE NEXUS
+      </ReturnToNexusText>
     </Slide>
   );
 };
+
+const ReturnToNexusText = styled.div`
+  color: white;
+  font-size: 1.5rem;
+  margin-top: 30px;
+  margin-bottom: 20px;
+  padding: 1rem;
+  // glow
+  text-shadow: 0 0 5px #ffdec9, 0 0 20px #ffdec9, 0 0 40px #ffdec9, 0 0 60px #ffdec9;
+`;
 
 const TextContainer = styled.div`
   border: 0.0625rem solid ${(props) => props.color ?? props.theme.palette.brand};
@@ -48,7 +58,8 @@ const ReturnToNexusButton = styled(Button)`
 
   &:hover {
     border: 1px solid;
-    border-image-source: linear-gradient(0deg, #ffdec9, #ffdec9), linear-gradient(0deg, #d9a37d, #d9a37d);
+    border-image-source: linear-gradient(0deg, #ffdec9, #ffdec9),
+      linear-gradient(0deg, #d9a37d, #d9a37d);
   }
 `;
 

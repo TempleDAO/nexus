@@ -188,8 +188,8 @@ export interface RelicService {
     error: Nullable<Error>;
     sacrificePrice: BigNumber;
   };
-  mintShard: {
-    handler(): Promise<void>;
+  mintQuizShard: {
+    handler(relicIndex: BigNumber): Promise<void>;
     isLoading: boolean;
     error: Nullable<Error>;
   };

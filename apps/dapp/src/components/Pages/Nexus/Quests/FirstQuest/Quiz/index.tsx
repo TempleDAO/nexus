@@ -7,6 +7,8 @@ import QuestionSlide from './QuestionSlide';
 import { useWallet } from 'providers/WalletProvider';
 import ConnectWalletSlide from './ConnectWalletSlide';
 import SuccessSlide from './SuccessSlide';
+import { BigNumber } from 'ethers';
+import SelectRelicDialog from 'components/Pages/Nexus/Origami/SelectRelicDialog';
 
 // TODO: Move to env?
 const NUMBER_OF_QUESTIONS = 10;
@@ -97,12 +99,24 @@ const Quiz = () => {
     setComplete(false);
   }, []);
 
+  const [selectedRelic, setSelectedRelic] = useState<BigNumber | undefined>(
+    undefined
+  );
+
+  const onRelicSelect = (relicId: BigNumber) => {
+    setSelectedRelic(relicId);
+  }
+
   if (showConnect) {
     return <ConnectWalletSlide />;
   }
 
   if (mintSuccess) {
     return <SuccessSlide />;
+  }
+
+  if (!selectedRelic) {
+    return <SelectRelicDialog onSelectRelic={onRelicSelect} />;
   }
 
   return (
@@ -123,7 +137,7 @@ const Quiz = () => {
       {!complete && questionNumber > NUMBER_OF_QUESTIONS && (
         <FinalSlide backButtonClickHandler={prevButtonHandler} submitButtonClickHandler={submitButtonHandler} />
       )}
-      {complete && <CollectSlide passed={passed} tryAgainButtonClickHandler={tryAgainButtonClickHandler} onSuccessCallback={onMintSuccess} />}
+      {complete && <CollectSlide passed={passed} tryAgainButtonClickHandler={tryAgainButtonClickHandler} onSuccessCallback={onMintSuccess} selectedRelic={selectedRelic} />}
     </>
   );
 };

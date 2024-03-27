@@ -23,8 +23,6 @@ import {
   TempleSacrifice__factory,
   ERC20__factory,
   ShardMinterImplementation__factory,
-  // Apocrypha__factory,
-  // PathofTheTemplarShard__factory,
 } from 'types/typechain';
 import { Nullable } from 'types/util';
 import { asyncNoop } from 'utils/helpers';
@@ -61,7 +59,7 @@ const INITIAL_STATE: RelicService = {
     error: null,
     sacrificePrice: ZERO,
   },
-  mintShard: {
+  mintQuizShard: {
     handler: asyncNoop,
     isLoading: false,
     error: null,
@@ -447,16 +445,21 @@ export const RelicProvider = (props: PropsWithChildren<unknown>) => {
       shouldReThrow: true,
     });
 
-  const mintShard = async () => {
+  const mintQuizShard = async (relicId: BigNumber) => {
     if (!signer || !wallet) {
       return;
     }
 
+    const minterContract = new ShardMinterImplementation__factory(
+      signer
+    ).attach(env.nexus.pathOfTemplarShardAddress);
+
     let receipt: ContractReceipt;
     try {
-      // const partnerMinterContract = new Apocrypha__factory(signer).attach(env.nexus.templePartnerMinterAddress);
-      // const txnReceipt = await partnerMinterContract.mintShard({ gasLimit: 400000 });
-      // receipt = await txnReceipt.wait();
+      const txnReceipt = await minterContract.mint(relicId, {
+        gasLimit: 400000,
+      });
+      receipt = await txnReceipt.wait();
     } catch (error: any) {
       console.log(error.message);
       throw error;
@@ -464,11 +467,11 @@ export const RelicProvider = (props: PropsWithChildren<unknown>) => {
 
     openNotification({
       title: 'Successfully Minted Shard',
-      hash: '', //receipt.transactionHash,
+      hash: receipt.transactionHash,
     });
   };
 
-  const [mintShardHandler, mintShardRequestState] = useRequestState(mintShard, {
+  const [mintQuizShardHandler, mintQuizShardRequestState] = useRequestState(mintQuizShard, {
     shouldReThrow: true,
   });
 
@@ -500,7 +503,7 @@ export const RelicProvider = (props: PropsWithChildren<unknown>) => {
       shouldReThrow: true,
     });
 
-  const mintOrigamiShard = async (relicIndex: BigNumber) => {
+  const mintOrigamiShard = async (relicId: BigNumber) => {
     if (!signer || !wallet) {
       return;
     }
@@ -511,7 +514,7 @@ export const RelicProvider = (props: PropsWithChildren<unknown>) => {
 
     let receipt: ContractReceipt;
     try {
-      const txnReceipt = await minterContract.mint(relicIndex, {
+      const txnReceipt = await minterContract.mint(relicId, {
         gasLimit: 400000,
       });
       receipt = await txnReceipt.wait();
@@ -562,10 +565,10 @@ export const RelicProvider = (props: PropsWithChildren<unknown>) => {
         },
         // TODO: Make this either more generic for all shards, or specific to the apocrypha shard
         // And in that case, then need a new method for path of templar shard claiming
-        mintShard: {
-          handler: mintShardHandler,
-          isLoading: mintShardRequestState.isLoading,
-          error: mintShardRequestState.error,
+        mintQuizShard: {
+          handler: mintQuizShardHandler,
+          isLoading: mintQuizShardRequestState.isLoading,
+          error: mintQuizShardRequestState.error,
         },
         mintPathOfTemplarShard: {
           handler: mintPathOfTemplarShardHandler,
