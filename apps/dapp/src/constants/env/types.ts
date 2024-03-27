@@ -94,6 +94,7 @@ interface Nexus {
   templeToken: string;
   templePartnerMinterAddress: string;
   pathOfTemplarShardAddress: string;
+  origamiShardMinterAddress: string;
   recipes: Recipe[];
   shardMetadata: {
     [key: number]: Shard;

@@ -1,5 +1,10 @@
 import { Network } from '@ethersproject/providers';
-import { BigNumber, ContractReceipt, Signer, ContractTransaction } from 'ethers';
+import {
+  BigNumber,
+  ContractReceipt,
+  Signer,
+  ContractTransaction,
+} from 'ethers';
 
 import { Nullable } from 'types/util';
 import { TransactionReceipt } from '@ethersproject/abstract-provider';
@@ -159,7 +164,10 @@ export interface RelicService {
   inventory: Nullable<ItemInventory>;
   inventoryLoading: boolean;
   updateInventory(): Promise<void>;
-  mintRelic(address: string, enclave: RelicEnclave): Promise<Nullable<RelicData>>;
+  mintRelic(
+    address: string,
+    enclave: RelicEnclave
+  ): Promise<Nullable<RelicData>>;
   equipShards(relicId: BigNumber, items: RelicItemData[]): Promise<void>;
   unequipShards(relicId: BigNumber, items: RelicItemData[]): Promise<void>;
   transmute(recipeId: number): Promise<void>;
@@ -180,13 +188,18 @@ export interface RelicService {
     error: Nullable<Error>;
     sacrificePrice: BigNumber;
   };
-  mintShard: {
-    handler(): Promise<void>;
+  mintQuizShard: {
+    handler(relicIndex: BigNumber): Promise<void>;
     isLoading: boolean;
     error: Nullable<Error>;
   };
   mintPathOfTemplarShard: {
     handler(shardIndex: number): Promise<void>;
+    isLoading: boolean;
+    error: Nullable<Error>;
+  };
+  mintOrigamiShard: {
+    handler(relicIndex: BigNumber): Promise<void>;
     isLoading: boolean;
     error: Nullable<Error>;
   };

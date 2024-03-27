@@ -4,20 +4,22 @@ import Image from 'components/Image/Image';
 import Slide from './Slide';
 import nexusCloseBook from 'assets/images/nexus/Shard1b.png';
 import { useRelic } from 'providers/RelicProvider';
+import { BigNumber } from 'ethers';
 
 type CollectSlideProps = {
   passed: boolean;
   tryAgainButtonClickHandler?: () => void;
   onSuccessCallback?: (() => Promise<void>) | (() => void);
+  selectedRelic: BigNumber;
 };
 
-const CollectSlide = ({ passed, tryAgainButtonClickHandler, onSuccessCallback }: CollectSlideProps) => {
-  const { mintShard } = useRelic();
-  const { handler: mintShardHandler, isLoading: mintShardLoading, error: mintShardError } = mintShard;
+const CollectSlide = ({ passed, tryAgainButtonClickHandler, onSuccessCallback, selectedRelic }: CollectSlideProps) => {
+  const { mintQuizShard } = useRelic();
+  const { handler: mintShardHandler, isLoading: mintShardLoading, error: mintShardError } = mintQuizShard;
 
   const collectShardHandler = async () => {
     console.debug('Going to mint shard');
-    await mintShardHandler();
+    await mintShardHandler(selectedRelic);
     if (onSuccessCallback) {
       onSuccessCallback();
     }
@@ -60,6 +62,7 @@ const CollectSlide = ({ passed, tryAgainButtonClickHandler, onSuccessCallback }:
               COLLECT SHARD
             </StyledButton>
           </ButtonsContainer>
+            <div>{`Selected Relic ${selectedRelic.toString()}`}</div>
           {mintShardError && (
             <ErrorContainer>
               {friendlyErrorMessage(mintShardError)}

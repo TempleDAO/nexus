@@ -128,6 +128,7 @@ const env: Environment = {
     templeToken: '',
     templePartnerMinterAddress: '',
     pathOfTemplarShardAddress: '',
+    origamiShardMinterAddress: '',
     recipes: [
     
     ],

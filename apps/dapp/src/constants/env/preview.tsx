@@ -138,7 +138,9 @@ const env: Environment = {
     templeSacrificeAddress: '0x1b274A49fF8Ec84f874B989EcF23840952D7E600',
     templeToken: '0x0090F9655a0B0A32cEE0Da5ae45E93EAB4C6d149',
     templePartnerMinterAddress: '0x2ae6318e34bb97ae3755AFcE75559452aA223A5D',
-    pathOfTemplarShardAddress: '',
+    // path of templar aka quiz
+    pathOfTemplarShardAddress: '0x377fe2181a06894c7513ef6327bddddcc08d848a',
+    origamiShardMinterAddress: '0x6DF00255eeb295fAF064fd4160C00efcC3e50C4c',
     recipes: [
       // { id: 0, required_ids: [0, 1], required_amounts: [1, 1], reward_ids: [2], reward_amounts: [1] },
       // { id: 2, required_ids: [0, 1], required_amounts: [2, 3], reward_ids: [2], reward_amounts: [1] },

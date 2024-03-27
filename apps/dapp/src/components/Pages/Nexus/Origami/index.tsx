@@ -4,6 +4,7 @@ import puzzle2Img from 'assets/images/origami/puzzle-2.png';
 import puzzle3Img from 'assets/images/origami/puzzle-3.png';
 import FoldingPuzzle from "./FoldingPuzzle";
 import { PuzzleSpec } from './puzzle-solution';
+import { useLocation } from 'react-router-dom';
 
 const PUZZLE_0: PuzzleSpec = {
   imgUrl: puzzle0Img,
@@ -41,9 +42,13 @@ const PUZZLE_3: PuzzleSpec = {
     [[{ x: 5, y: 0}, { x: 2.5, y: 5 }], [[{ x: 5, y: -2.5 }, { x: 0, y: 5 }]]],
   ]]
 }
-  
+
 const OrigamiPage = () => {
-  return <FoldingPuzzle puzzles={[PUZZLE_0, PUZZLE_1, PUZZLE_2, PUZZLE_3]} />
+  const location = useLocation();
+  const searchParams = new URLSearchParams(location.search);
+  const isDev = searchParams.get('dev');
+
+  return <FoldingPuzzle puzzles={[PUZZLE_0, PUZZLE_1, PUZZLE_2, PUZZLE_3]} devMode={!!isDev} />
 };
 
 export default OrigamiPage;
